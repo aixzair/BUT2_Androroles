@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,7 +23,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -79,7 +83,7 @@ class MainActivity : ComponentActivity() {
     }
 
     fun Autre() {
-        val mgr = ContextCompat.getSystemService(ConnectivityManager::class.java)
+        // val mgr = ContextCompat.getSystemService(ConnectivityManager::class.java)
 
     }
 }
@@ -97,11 +101,67 @@ fun Code() {
         Column(
             modifier = Modifier.fillMaxHeight()
         ){
-            Row(modifierRow) {
-                Text("Choix palanque");
+            val liste = mutableListOf(
+                "texte A",
+                "texte B",
+                "texte C"
+            );
+            val (selection, setSelection) = remember { mutableStateOf(-1) }
+            val personnes = arrayOf(
+                "personne",
+                "toi",
+                "lui"
+            );
+
+            AfficherSelection(liste = liste, selection = selection, setSelection = setSelection)
+            AfficherPerssones(personnes = personnes);
+        }
+    }
+}
+
+@Composable
+fun AfficherSelection(liste: MutableList<String>, selection: Int, setSelection: (Int) -> Unit) {
+    val modifier = Modifier.fillMaxWidth();
+
+    Row(
+        modifier = modifier
+    ) {
+        Text(text = "Choisissez votre palanquée :")
+    }
+    Column (
+        modifier = modifier
+    ) {
+        liste.forEachIndexed { index, valeur ->
+            val couleur =
+                if (index == selection)
+                    Color.Blue;
+                else
+                    Color.Transparent;
+
+            Surface (
+                color = couleur,
+                modifier = modifier
+            ) {
+                Text(
+                    text = valeur,
+                    modifier = Modifier.clickable {
+                        setSelection(index)
+                    }
+                )
             }
         }
     }
 }
 
-
+@Composable
+fun AfficherPerssones(personnes: Array<String>) {
+    Column (
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        for (personne in personnes) {
+            Row () {
+                Text(text = personne);
+            }
+        }
+    }
+}
