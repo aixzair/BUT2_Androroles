@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -37,8 +38,11 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.layout
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
@@ -134,7 +138,7 @@ class MainActivity : ComponentActivity() {
 fun Page() {
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
+        color = Color.Blue
     ) {
         Column(
             modifier = Modifier.fillMaxWidth()
@@ -176,8 +180,12 @@ fun AfficherSelection(palanques: List<Palanque>, selection: Int, setSelection: (
     var (derouler, setDerouler) = remember { mutableStateOf(false) }
     var (index, setIndex) = remember { mutableIntStateOf(-1) }
 
-    Row (
-        modifier = Modifier.fillMaxWidth()
+    Column (
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 20.dp)
+            .background(Color.White)
+            .wrapContentSize(Alignment.Center)
     ) {
         Text(text = "Choisissez votre palanquée : ")
         val textBox = if (index == -1) {
@@ -193,11 +201,10 @@ fun AfficherSelection(palanques: List<Palanque>, selection: Int, setSelection: (
                 .border(1.dp, Color.Black)
                 .background(Color.LightGray)
                 .padding(start = 6.dp, end = 6.dp)
-                .width(130.dp)
+                .width(150.dp)
+                .wrapContentSize(Alignment.Center)
         ) {
-            Text(
-                text = textBox,
-            )
+            Text(text = textBox)
         }
         DropdownMenu(
             expanded = derouler,
@@ -258,11 +265,18 @@ fun AfficherPerssones(selection: Int) {
     }.start()
 
     if (selection != -1 ) {
-        for (adherent in adherents) {
-            Row (
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = "${adherent.ad_nom} ${adherent.ad_prenom}")
+        Column (
+            modifier = Modifier.padding(top = 16.dp)
+        ) {
+            for (adherent in adherents) {
+                Row (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
+                        .background(Color.LightGray)
+                ) {
+                    Text(text = "${adherent.ad_nom} ${adherent.ad_prenom}")
+                }
             }
         }
     }
