@@ -1,5 +1,6 @@
 package com.example.androroles
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -40,6 +41,9 @@ class Connexion : AppCompatActivity() {
                 if (utilisateur != null) {
                     // Afficher un message de connexion réussie
                     label.text = "Connexion réussie"
+
+                    val intent = Intent(this@Connexion, MainActivity::class.java)
+                    startActivity(intent)
                 } else {
                     // Afficher un message de connexion échouée
                    label.text = "Connexion échouée"
